@@ -1,71 +1,164 @@
-import './register.css'
-import img1 from '../img/1.jpg'
-import { NavLink } from 'react-router-dom'
-import { useState } from 'react'
-import axios from 'axios'
+import "./register.css";
+// import img1 from '../img/1.jpg'
+import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Loading from "../UI/Loading/Loading";
+import { api } from "../../Api";
 
 export default function Register() {
-    const [data, setData] = useState({
-        full_name: "",
-        email: "",
-        phone: "",
-        password: "",
-        password2: ""
-    })
-    console.log(data);
+  const [loading, setLoading] = useState(false);
+  const [inputData, setInputData] = useState({
+    first_name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirm_password: "",
+  });
+  const navigate = useNavigate();
 
-    const [responseData, setResponseData] = useState(null);
-
-    const url = 'http://90.156.227.171/register/'
-
-    const requestData = async () => {
-        try {
-            const response = await axios.post(url, data);
-            setResponseData(response.data);
-            localStorage.setItem("token", response.data.token
-            )
-        } catch (error) {
-            console.error('Registration failed', error);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    if (inputData.password === inputData.confirm_password) {
+      const dataNew = {
+        email: inputData.email,
+        phone: inputData.phone,
+        full_name: inputData.first_name,
+        password: inputData.password,
+        password2: inputData.confirm_password,
+      };
+      try {
+        const response = await api.post("/register/", dataNew);
+        if (response.data.response === true) {
+          localStorage.setItem("email", inputData.email);
+          navigate("/activation");
+          alert("данные в консоли");
+          console.log(response.data);
+        } else {
+          if (response.data.email) {
+            alert(response.data.email);
+          }
+          if (response.data.phone) {
+            alert(response.data.phone);
+          }
+          if (response.data.error) {
+            alert(response.data.error);
+          }
         }
-    };
-    
-   
-    return (
-        <div>
-            <div className='boxing'>
-                <div className="block-main">
-                    <div>
-                        <img src={img1} alt="" className='img-ensar2' />
-                    </div>
-                    <div className='block-main_two'>
-                        <div className='block-inputs'>
-                            <label htmlFor="">Аты-жөнү</label>
-                            <input type="text" className='inputs' onChange={(e) => setData({ ...data, full_name: e.target.value })} required/>
-                        </div>
-                        <div className='block-inputs'>
-                            <label htmlFor="">Почта</label>
-                            <input type="text" className='inputs' onChange={(e) => setData({ ...data, email: e.target.value })} required/>
-                        </div>
-                        <div className='block-inputs'>
-                            <label htmlFor="" className='label'>Телефон номер</label>
-                            <input type="text" className='inputs' placeholder='+996 xxxxxxxxx' required onChange={(e) => setData({ ...data, phone: e.target.value })} />
-                        </div>
-                        <div className='block-inputs'>
-                            <label htmlFor="" className='label' >Сыр сөз ( Эң аз 8 символ )</label>
-                            <input type="password" className='inputs'required  minLength={8} onChange={(e) => setData({ ...data, password: e.target.value })} />
-                        </div>
-                        <div className='block-inputs'>
-                            <label htmlFor="" className='label'>Сыр сөздү кайталоо</label>
-                            <input type="password" className='inputs' required minLength={8} onChange={(e) => setData({ ...data, password2: e.target.value })} />
-                        </div>
-                        <div className='block-slowing'>
-                            <a href='Мурда катталдыңыз беле?' className='ssylka'>Мурда катталдыңыз беле?</a>
-                            <button onClick={requestData} required className='btn3'><NavLink to={'/word'} className='btn-naw'>Катталуу</NavLink></button>
-                        </div>
-                    </div>
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
+      alert("Пароли не совпадают", "error");
+    }
+  };
 
-                </div>
-            </div>
+  return (
+    <div>
+      <div className="boxing">
+        <div className="block-main">
+          <div>{/* <img src={img1} alt="" className='img-ensar2' /> */}</div>
+          <div className="block-main_two">
+            <form onSubmit={handleSubmit}>
+              <div className="block-inputs">
+                <label htmlFor="">Аты-жөнү</label>
+                <input
+                  value={inputData.first_name}
+                  onChange={(e) =>
+                    setInputData({
+                      ...inputData,
+                      first_name: e.target.value,
+                    })
+                  }
+                  type="text"
+                  className="inputs"
+                  required
+                />
+              </div>
+              <div className="block-inputs">
+                <label htmlFor="">Почта</label>
+                <input
+                  value={inputData.email}
+                  onChange={(e) =>
+                    setInputData({
+                      ...inputData,
+                      email: e.target.value,
+                    })
+                  }
+                  type="text"
+                  className="inputs"
+                  required
+                />
+              </div>
+              <div className="block-inputs">
+                <label htmlFor="" className="label">
+                  Телефон номер
+                </label>
+                <input
+                  value={inputData.phone}
+                  onChange={(e) =>
+                    setInputData({
+                      ...inputData,
+                      phone: e.target.value,
+                    })
+                  }
+                  type="number"
+                  className="inputs"
+                  placeholder="+996 xxxxxxxxx"
+                  required
+                />
+              </div>
+              <div className="block-inputs">
+                <label htmlFor="" className="label">
+                  Сыр сөз ( Эң аз 8 символ )
+                </label>
+                <input
+                  value={inputData.password}
+                  onChange={(e) =>
+                    setInputData({
+                      ...inputData,
+                      password: e.target.value,
+                    })
+                  }
+                  type="password"
+                  className="inputs"
+                  required
+                  minLength={8}
+                />
+              </div>
+              <div className="block-inputs">
+                <label htmlFor="" className="label">
+                  Сыр сөздү кайталоо
+                </label>
+                <input
+                  value={inputData.confirm_password}
+                  onChange={(e) =>
+                    setInputData({
+                      ...inputData,
+                      confirm_password: e.target.value,
+                    })
+                  }
+                  type="password"
+                  className="inputs"
+                  required
+                  minLength={8}
+                />
+              </div>
+              <div className="block-slowing">
+                <a href="/login" className="ssylka">
+                  Мурда катталдыңыз беле?
+                </a>
+                <button onSubmit={handleSubmit} required className="btn3">
+                  {loading ? <Loading /> : "Катталуу"}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  );
 }

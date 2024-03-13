@@ -88,6 +88,10 @@
 }
 
 .btn{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 130px;
     height: 30px;
     border: none;
