@@ -1,0 +1,84 @@
+body {
+    background: #f0f0f0;
+}
+
+* {
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.block-main {
+    width: 500px;
+    height: 690px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inputs{
+    width: 390px;
+    height: 40px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 0.1px solid;
+    outline-color: rgb(42, 87, 165);
+    font-size: 16px;
+}
+
+.inputs::placeholder {
+    padding-left: 10px;
+    font-size: 16px;
+}
+
+.img-ensar2{
+    width: 120px;
+    margin-top: 15px;
+}
+
+.boxing {
+    width: 100%;
+    height: 680px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.block-main_two {
+    /* width: 440px; */
+    width: 88%;
+    height: 537px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 1px 1px 15px #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    background: white;
+}
+
+.block-slowing {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    margin-left: 73px;
+}
+
+.btn3 {
+    width: 125px;
+    height: 30px;
+    border: none;
+    background: rgb(53, 102, 147);
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.btn-naw {
+    text-decoration: none;
+    color: white;
+}
+
+.btn3:hover{
+    box-shadow: 3px 4px 6px rgb(53, 102, 147);
+}
